@@ -16,6 +16,8 @@ import Allfoods from "./User/pages/Allfoods";
 import Header from "./Common/Header";
 import Footer from "./Common/Footer";
 import Login from "./Common/Login";
+import Hotelauth from "./Hotel/pages/Hotelauth";
+import Userauth from "./User/pages/Userauth";
 
 function App() {
   return (
@@ -30,12 +32,16 @@ function App() {
         <Route path="/add-food" element={<Addfood/>}/>
         <Route path="/hotel-home" element={<Hotelhome/>}/>
         <Route path="/view-order" element={<Vieworder/>}/>
+        <Route path="/hotel-login" element={<Hotelauth/>}/>
+        <Route path="/hotel-register" element={<Hotelauth register/>}/>
 
         {/* User */}
         <Route path="/" element={<Userhome/>}/>
         <Route path="/view-food" element={<Viewfood/>}/>
         <Route path="/checkout" element={<Checkout/>}/>
         <Route path="/all-foods" element={<Allfoods/>}/>
+        <Route path="/user-login" element={<Userauth/>}/>
+        <Route path="/user-register" element={<Userauth register/>}/>
 
         {/* common */}
         <Route path="/header" element={<Header/>}/>
