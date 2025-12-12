@@ -1,14 +1,97 @@
-import React from 'react'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import { FaCircleUser } from 'react-icons/fa6'
-import { Link } from 'react-router-dom'
+import React, { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaCircleUser } from "react-icons/fa6";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { loginUserAPI, registerUserAPI } from "../../service/allAPI";
 
-function Userauth({register}) {
+function Userauth({ register }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [userDetails, setuserDetails] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmpassword: "",
+  });
+  console.log(userDetails);
+  const navigate = useNavigate();
+
+  const HandleRegister = async () => {
+    const { username, email, password, confirmpassword } = userDetails;
+    if (!username || !email || !password || !confirmpassword) {
+      alert("Fill All Fields Completety");
+    } else {
+      const result = await registerUserAPI(userDetails);
+      console.log(result);
+      if (result.status == 200) {
+        toast.success("Registered Successfully");
+        setuserDetails({
+          username: "",
+          email: "",
+          password: "",
+          confirmpassword: "",
+        });
+        navigate("/user-login");
+      } else if (result.status == 404) {
+        toast.error(result.response.data);
+        setuserDetails({
+          username: "",
+          email: "",
+          password: "",
+          confirmpassword: "",
+        });
+      } else {
+        toast.error("Something went wrong");
+      }
+    }
+  };
+
+  const HandleLogin = async () => {
+    const { email, password } = userDetails;
+    if (!email || !password) {
+      toast.info("Fill the Form Completely");
+    } else {
+      const result = await loginUserAPI(userDetails);
+      console.log(result);
+      if (result.status == 200) {
+        sessionStorage.setItem(
+          "existingUser",
+          JSON.stringify(result.data.existingUser)
+        );
+        sessionStorage.setItem("token", result.data.token);
+        toast.success(`Login Sucessfull`);
+        navigate("/");
+        setuserDetails({
+          username: "",
+          email: "",
+          password: "",
+        });
+      } else if (result.status == 404) {
+        toast.warning(result.status.data);
+        setuserDetails({
+          username: "",
+          email: "",
+          password: "",
+        });
+      } else {
+        toast.error(`Something went wrong`);
+        setuserDetails({
+          username: "",
+          email: "",
+          password: "",
+        });
+      }
+    }
+  };
+
   return (
     <>
-     <div className='w-full min-h-screen flex justify-center items-center flex-col bg-[url("https://cognizant.scene7.com/is/image/cognizant/insurance-innovation-as-a-service-hero-banner")] bg-cover bg-center'>
+      <div className='w-full min-h-screen flex justify-center items-center flex-col bg-[url("https://cognizant.scene7.com/is/image/cognizant/insurance-innovation-as-a-service-hero-banner")] bg-cover bg-center'>
         <div className="p-10">
-          <h1 className="text-3xl font-bold text-center text-white"> Hotel Login</h1>
+          <h1 className="text-3xl font-bold text-center text-white">
+            {" "}
+            Hotel Login
+          </h1>
           <div
             style={{ width: "400px" }}
             className="bg-blue-950 text-white p-5 flex flex-col my-5 justify-center items-center "
@@ -111,15 +194,15 @@ function Userauth({register}) {
               <div className="mt-4">
                 {register ? (
                   <button
+                    onClick={HandleRegister}
                     type="button"
-                    
                     className="bg-green-700 p-2 w-full rounded"
                   >
                     Register
                   </button>
                 ) : (
                   <button
-                    
+                    onClick={HandleLogin}
                     type="button"
                     className="bg-green-700 p-2 w-full rounded"
                   >
@@ -165,7 +248,7 @@ function Userauth({register}) {
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Userauth
+export default Userauth;

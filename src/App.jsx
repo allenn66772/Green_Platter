@@ -18,6 +18,7 @@ import Footer from "./Common/Footer";
 import Login from "./Common/Login";
 import Hotelauth from "./Hotel/pages/Hotelauth";
 import Userauth from "./User/pages/Userauth";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -49,6 +50,11 @@ function App() {
         <Route path="/login" element={<Login/>}/>
 
       </Routes>
+         <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          theme="colored"
+        />
       
     </>
   );
