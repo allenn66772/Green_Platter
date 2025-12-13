@@ -13,6 +13,12 @@ export const loginUserAPI=async(reqBody)=>{
 }
 
 //Hotel side
+
+//Hotel register
 export const registerHotelAPI=async(reqBody)=>{
     return await CommonAPI ("POST",`${SERVERURL}/hotel-register`,reqBody)
+}
+//Hotel login
+export const loginHotelAPI=async(reqBody)=>{
+    return await CommonAPI ("POST",`${SERVERURL}/hotel-login`,reqBody)
 }

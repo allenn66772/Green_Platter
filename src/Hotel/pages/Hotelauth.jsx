@@ -1,17 +1,94 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaCircleUser } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { loginHotelAPI, registerHotelAPI } from "../../service/allAPI";
 
 function Hotelauth({register}) {
      const [showPassword, setShowPassword] = useState(false);
      const [hotelDetails, sethotelDetails] = useState({
-    username: "",
+    hotelname: "",
     email: "",
     password: "",
     confirmpassword: "",
   });
-  console.log(userDetails);
+  console.log(hotelDetails);
+  const navigate=useNavigate()
+
+  const HandleRegister=async()=>{
+    const{hotelname,email,password,confirmpassword}=hotelDetails
+    if(!hotelname || !email || !password || !confirmpassword){
+      toast.warning("Fill All Fields Completety")
+    }else{
+      const result=await registerHotelAPI(hotelDetails)
+      console.log(result);
+      if(result.status==200){
+        toast.success("Hotel Registered Successfully")
+        sethotelDetails({
+          hotelname:"",
+          email:"",
+          password:"",
+          confirmpassword:""
+        })
+        navigate("/hotel-login")
+      }else if(result.status==404){
+        toast.error(result.response.data)
+         sethotelDetails({
+          hotelname:"",
+          email:"",
+          password:"",
+          confirmpassword:""
+        })
+      }else{
+        toast.error("Something went wrong")
+      }
+      
+
+    }
+    
+  }
+  
+  const HandleLogin =async()=>{
+    const{email,password}=hotelDetails
+    if(!email || !password){
+      toast.warning("Fill the forms completely")
+    }else{
+      const result= await loginHotelAPI(hotelDetails)
+      console.log(result);
+      if(result.status==200){
+        sessionStorage.setItem("existingHotel",JSON.stringify(result.data.existingHotel))
+        sessionStorage.setItem("token",result.data.token)
+        toast.success("Login Sucessful")
+        navigate("/hotel-home")
+        sethotelDetails({
+          hotelname:"",
+          email:"",
+          password:""
+        })
+      }else if(result.status==404){
+        toast.warning(result.status.data)
+        sethotelDetails({
+          hotelname:"",
+          email:"",
+          password:""
+        })
+      }else {
+        toast.error("Something went Wrong")
+        sethotelDetails({
+          hotelname:"",
+          email:"",
+          password:""
+        })
+      }
+      
+    }
+    
+  }
+
+
+
+  console.log(hotelDetails);
   return (
     <>
       <div className='w-full min-h-screen flex justify-center items-center flex-col bg-[url("https://cognizant.scene7.com/is/image/cognizant/insurance-innovation-as-a-service-hero-banner")] bg-cover bg-center'>
@@ -39,15 +116,15 @@ function Hotelauth({register}) {
                 <div className="my-5">
                   <label htmlFor="">Username</label>
                   <input
-                    value={hotelDetails?.username}
+                    value={hotelDetails?.hotelname}
                     onChange={(e) =>
                       sethotelDetails({
                         ...hotelDetails,
-                        username: e.target.value,
+                        hotelname: e.target.value,
                       })
                     }
                     type="text"
-                    placeholder="username"
+                    placeholder="hotelname"
                     className="bg-white p-2 w-full rounded mt-2 placeholder-gray-500 text-black"
                   />
                 </div>
@@ -118,7 +195,7 @@ function Hotelauth({register}) {
 
               <div className="mt-4">
                 {register ? (
-                  <button
+                  <button onClick={HandleRegister}
                     type="button"
                     
                     className="bg-green-700 p-2 w-full rounded"
@@ -127,6 +204,7 @@ function Hotelauth({register}) {
                   </button>
                 ) : (
                   <button
+                  onClick={HandleLogin}
                     
                     type="button"
                     className="bg-green-700 p-2 w-full rounded"
