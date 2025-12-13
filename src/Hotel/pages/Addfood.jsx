@@ -1,105 +1,187 @@
-import React from 'react'
-import Hotelsidebar from '../components/Hotelsidebar'
-import Header from '../../Common/Header'
+import React, { useState } from "react";
+import Hotelsidebar from "../components/Hotelsidebar";
+import Header from "../../Common/Header";
+import { toast } from "react-toastify";
 
 function Addfood() {
+  const [preview, setpreview] = useState("");
+  const [allUploadImages, setallUploadImages] = useState([]);
+  const [foodDetails, setfoodDetails] = useState({
+    foodname: "",
+    price: "",
+    category: "",
+    description: "",
+    uploadImage: [],
+  });
+  console.log(foodDetails);
+
+  const handleFile = (e) => {
+    const url = URL.createObjectURL(e.target.files[0]);
+    setfoodDetails({
+      ...foodDetails,
+      uploadImage: [...foodDetails.uploadImage, e.target.files[0]],
+    });
+
+    setallUploadImages([...allUploadImages, url]);
+    setpreview(url);
+  };
+
+  //add food
+  const Handleaddbook=async()=>{
+    const{foodname,price,category,description,uploadImage}=foodDetails
+    if(!foodname || !price || !category || !description || uploadImage.length===0){
+      toast.info("Fill all fields completely")
+    }else{
+      const result=
+    }
+  }
   return (
     <>
-    <Header/>
-    <div className="flex">
+      <Header />
 
-      {/* Sidebar */}
-      <Hotelsidebar />
+      <div className="flex">
+        {/* Sidebar */}
+        {/* <Hotelsidebar /> */}
 
-      {/* Main Content */}
-      <div className="flex-1 p-8 bg-gray-100 min-h-screen">
+        {/* Main Content */}
+        <div className="flex-1 p-8 bg-gray-100 min-h-screen">
+          <h1 className="text-3xl font-semibold mb-6">Add New Food Item</h1>
 
-        {/* Page Title */}
-        <h1 className="text-3xl font-semibold mb-6">Add New Food Item</h1>
+          {/* Center Card */}
+          <div className="flex justify-center">
+            <div className="bg-white p-8 shadow rounded-2xl w-full max-w-4xl">
+              <form className="space-y-6">
+                {/* Food Name */}
+                <div>
+                  <label className="block text-lg font-medium text-gray-700 mb-2">
+                    Food Name
+                  </label>
+                  <input
+                    type="text"
+                    value={foodDetails.foodname}
+                    onChange={(e) =>
+                      setfoodDetails({
+                        ...foodDetails,
+                        foodname: e.target.value,
+                      })
+                    }
+                    placeholder="Enter food name"
+                    className="w-full p-3 border rounded-xl focus:outline-none"
+                  />
+                </div>
 
-        {/* UI Card */}
-        <div className="bg-white p-8 shadow rounded-2xl w-full max-w-3xl">
+                {/* Price */}
+                <div>
+                  <label className="block text-lg font-medium text-gray-700 mb-2">
+                    Price (₹)
+                  </label>
+                  <input
+                    type="number"
+                    value={foodDetails.price}
+                    onChange={(e) =>
+                      setfoodDetails({
+                        ...foodDetails,
+                        price: e.target.value,
+                      })
+                    }
+                    placeholder="Enter food price"
+                    className="w-full p-3 border rounded-xl focus:outline-none"
+                  />
+                </div>
 
-          <form className="space-y-6">
+                {/* Category */}
+                <div>
+                  <label className="block text-lg font-medium text-gray-700 mb-2">
+                    Category
+                  </label>
+                  <select
+                    value={foodDetails.category}
+                    onChange={(e) =>
+                      setfoodDetails({
+                        ...foodDetails,
+                        category: e.target.value,
+                      })
+                    }
+                    className="w-full p-3 border rounded-xl focus:outline-none"
+                  >
+                    <option value="">Select category</option>
+                    <option>Biriyani</option>
+                    <option>Snacks</option>
+                    <option>Drinks</option>
+                    <option>Cakes</option>
+                    <option>Fried Items</option>
+                  </select>
+                </div>
 
-            {/* Food Name */}
-            <div>
-              <label className="block text-lg font-medium text-gray-700 mb-2">
-                Food Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter food name"
-                className="w-full p-3 border rounded-xl focus:outline-none"
-              />
+                {/* Description & Image */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Description */}
+                  <div>
+                    <label className="block text-lg font-medium text-gray-700 mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      rows="6"
+                      value={foodDetails.description}
+                      onChange={(e) =>
+                        setfoodDetails({
+                          ...foodDetails,
+                          description: e.target.value,
+                        })
+                      }
+                      placeholder="Enter description..."
+                      className="w-full p-3 border rounded-xl focus:outline-none"
+                    ></textarea>
+                  </div>
+
+                  {/* Upload & Preview */}
+                  <div>
+                    <label className="block text-lg font-medium text-gray-700 mb-2">
+                      Food Image
+                    </label>
+
+                    <div className="flex gap-4">
+                      {/* Upload Box */}
+                      <label className="w-36 h-36 border-2 border-dashed border-gray-400 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50">
+                        <span className="text-gray-500 text-sm">Upload</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFile}
+                          className="hidden"
+                        />
+                      </label>
+
+                      {/* Preview Box */}
+                      <div className="w-36 h-36 border rounded-xl flex items-center justify-center bg-gray-100 overflow-hidden">
+                        {preview ? (
+                          <img
+                            src={preview}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-gray-400 text-sm">Preview</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Button */}
+                <button
+                  type="button"
+                  className="w-full bg-red-600 text-white py-3 rounded-xl text-lg font-medium hover:bg-red-700 transition"
+                >
+                  Add Food
+                </button>
+              </form>
             </div>
-
-            {/* Price */}
-            <div>
-              <label className="block text-lg font-medium text-gray-700 mb-2">
-                Price (₹)
-              </label>
-              <input
-                type="number"
-                placeholder="Enter food price"
-                className="w-full p-3 border rounded-xl focus:outline-none"
-              />
-            </div>
-
-            {/* Category */}
-            <div>
-              <label className="block text-lg font-medium text-gray-700 mb-2">
-                Category
-              </label>
-              <select className="w-full p-3 border rounded-xl text-gray-600 focus:outline-none">
-                <option>Select category</option>
-                <option>Biriyani</option>
-                <option>Snacks</option>
-                <option>Drinks</option>
-                <option>Cakes</option>
-                <option>Fried Items</option>
-              </select>
-            </div>
-
-            {/* Description */}
-            <div>
-              <label className="block text-lg font-medium text-gray-700 mb-2">
-                Description
-              </label>
-              <textarea
-                placeholder="Enter description..."
-                rows="4"
-                className="w-full p-3 border rounded-xl focus:outline-none"
-              ></textarea>
-            </div>
-
-            {/* Image Upload UI Only */}
-            <div>
-              <label className="block text-lg font-medium text-gray-700 mb-2">
-                Food Image
-              </label>
-
-              <div className="w-40 h-40 border-2 border-dashed border-gray-400 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50">
-                <span className="text-gray-500">Upload</span>
-              </div>
-            </div>
-
-            {/* Button */}
-            <button
-              type="button"
-              className="w-full bg-red-600 text-white py-3 rounded-xl text-lg font-medium hover:bg-red-700 transition"
-            >
-              Add Food
-            </button>
-
-          </form>
-
+          </div>
         </div>
-
       </div>
-    </div>
     </>
-  )
+  );
 }
 
-export default Addfood
+export default Addfood;
