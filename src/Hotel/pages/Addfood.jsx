@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Hotelsidebar from "../components/Hotelsidebar";
 import Header from "../../Common/Header";
 import { toast } from "react-toastify";
+import { addFoodAPI } from "../../service/allAPI";
+import { img } from "framer-motion/client";
 
 function Addfood() {
   const [preview, setpreview] = useState("");
+  const [token,settoken]=useState("")
   const [allUploadImages, setallUploadImages] = useState([]);
   const [foodDetails, setfoodDetails] = useState({
     foodname: "",
     price: "",
     category: "",
     description: "",
-    uploadImage: [],
+    uploadImages: [],
   });
   console.log(foodDetails);
 
@@ -19,7 +22,7 @@ function Addfood() {
     const url = URL.createObjectURL(e.target.files[0]);
     setfoodDetails({
       ...foodDetails,
-      uploadImage: [...foodDetails.uploadImage, e.target.files[0]],
+      uploadImages: [...foodDetails.uploadImages, e.target.files[0]],
     });
 
     setallUploadImages([...allUploadImages, url]);
@@ -27,14 +30,41 @@ function Addfood() {
   };
 
   //add food
-  const Handleaddbook=async()=>{
-    const{foodname,price,category,description,uploadImage}=foodDetails
-    if(!foodname || !price || !category || !description || uploadImage.length===0){
+  const Handleaddfood=async()=>{
+    const{foodname,price,category,description,uploadImages}=foodDetails
+    if(!foodname || !price || !category || !description || uploadImages.length===0){
       toast.info("Fill all fields completely")
     }else{
-      const result=
+      const reqHeader={Authorization:`Bearer ${token}`}
+      const reqBody=new FormData()
+
+      for(let key in foodDetails){
+        if(key !=="uploadImages")reqBody.append(key,foodDetails[key])
+          else uploadImages.forEach((img)=>reqBody.append("uploadImages",img))
+      }
+   
+       try {
+                  const result=await addFoodAPI(reqBody,reqHeader)
+                  console.log(result);
+                  if(result.status == 200){
+                    toast.success("Food added successfully")
+                  }else{
+                    toast.error("something went wrong")
+                  }
+                  
+
+       } catch (error) {
+        console.log(error);
+        
+        
+       }
     }
   }
+  useEffect(()=>{
+    if(sessionStorage.getItem("token")){
+      settoken(sessionStorage.getItem("token"))
+    }
+  },[])
   return (
     <>
       <Header />
@@ -169,7 +199,7 @@ function Addfood() {
                 </div>
 
                 {/* Button */}
-                <button
+                <button onClick={Handleaddfood}
                   type="button"
                   className="w-full bg-red-600 text-white py-3 rounded-xl text-lg font-medium hover:bg-red-700 transition"
                 >

@@ -32,6 +32,7 @@ function App() {
         {/* Hotel */}
         <Route path="/add-food" element={<Addfood/>}/>
         <Route path="/hotel-home" element={<Hotelhome/>}/>
+        
         <Route path="/view-order" element={<Vieworder/>}/>
         <Route path="/hotel-login" element={<Hotelauth/>}/>
         <Route path="/hotel-register" element={<Hotelauth register/>}/>
