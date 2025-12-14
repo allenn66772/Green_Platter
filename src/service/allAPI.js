@@ -30,3 +30,7 @@ export const addFoodAPI=async(reqBody,reqHeader)=>{
 export const getHotelAddedFoodAPI=async(reqHeader)=>{
     return await CommonAPI ("GET",`${SERVERURL}/hotel-added-foods`,{},reqHeader)
 }
+//get home foods
+export const  getAllFoodsInHomeAPI=async()=>{
+    return await CommonAPI ("GET",`${SERVERURL}/home-foods`)
+}

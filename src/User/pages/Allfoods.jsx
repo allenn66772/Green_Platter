@@ -1,5 +1,6 @@
 import React from 'react'
 import Header from '../../Common/Header'
+import Footer from '../../Common/Footer'
 
 function Allfoods() {
   return (
@@ -8,6 +9,34 @@ function Allfoods() {
 
       {/* User Header */}
       <Header />
+{/* <!-- Filter Section --> */}
+<div class="w-full bg-gray-100  p-4 mb-6">
+  <h2 class="text-lg font-semibold text-gray-700 ms-4 mb-3">
+    Filter by Category
+  </h2>
+
+  <div class="flex flex-wrap gap-3 ms-3">
+    <button class="px-4 py-2 rounded-full border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition">
+      All
+    </button>
+
+    <button class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 hover:bg-red-500 hover:text-white hover:border-red-500 transition">
+      Veg
+    </button>
+
+    <button class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 hover:bg-red-500 hover:text-white hover:border-red-500 transition">
+      Non-Veg
+    </button>
+
+    <button class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 hover:bg-red-500 hover:text-white hover:border-red-500 transition">
+      Fast Food
+    </button>
+
+    <button class="px-4 py-2 rounded-full border border-gray-300 text-gray-600 hover:bg-red-500 hover:text-white hover:border-red-500 transition">
+      Desserts
+    </button>
+  </div>
+</div>
 
       {/* Page Title */}
       <div className="px-6 py-8">
@@ -89,6 +118,7 @@ function Allfoods() {
       </div>
 
     </div>
+    <Footer/>
     </>
   )
 }
