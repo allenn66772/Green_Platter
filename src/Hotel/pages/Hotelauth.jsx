@@ -233,14 +233,14 @@ function Hotelauth({register}) {
                 {register ? (
                   <p>
                     Are you Already a user{" "}
-                    <Link className="text-blue-400" to={"/login"}>
+                    <Link className="text-blue-400" to={"/hotel-login"}>
                       Login
                     </Link>{" "}
                   </p>
                 ) : (
                   <p>
                     Are you new user?{" "}
-                    <Link className="text-blue-400" to={"/register"}>
+                    <Link className="text-blue-400" to={"/hotel-register"}>
                       Register
                     </Link>{" "}
                   </p>

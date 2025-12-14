@@ -26,3 +26,7 @@ export const loginHotelAPI=async(reqBody)=>{
 export const addFoodAPI=async(reqBody,reqHeader)=>{
     return await CommonAPI ("POST",`${SERVERURL}/add-food`,reqBody,reqHeader)
 }
+//get hotel added food
+export const getHotelAddedFoodAPI=async(reqHeader)=>{
+    return await CommonAPI ("GET",`${SERVERURL}/hotel-added-foods`,{},reqHeader)
+}
