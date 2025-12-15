@@ -21,7 +21,7 @@ function Userhome() {
     if (!token) {
       navigate("/user-login");
     } else {
-      navigate("/all-foodsj");
+      navigate("/all-foods");
     }
   };
 

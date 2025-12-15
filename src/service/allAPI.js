@@ -34,3 +34,7 @@ export const getHotelAddedFoodAPI=async(reqHeader)=>{
 export const  getAllFoodsInHomeAPI=async()=>{
     return await CommonAPI ("GET",`${SERVERURL}/home-foods`)
 }
+//get all foods to user
+export const getAllFoodstoUserAPI=async(searchKey)=>{
+    return await CommonAPI ("GET",`${SERVERURL}/all-foods?search=${searchKey}`,{})
+}
