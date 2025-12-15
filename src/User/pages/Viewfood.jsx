@@ -1,8 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaStar } from "react-icons/fa";
 import Header from '../../Common/Header';
+import { useParams } from 'react-router-dom';
+import { viewFoodsAPI } from '../../service/allAPI';
+import SERVERURL from '../../service/ServerURL';
 
 function Viewfood() {
+  const [foodDetails,setfoodDetails]=useState({
+    uploadImages:[]
+  })
+  const {id}=useParams()
+
+  const handleViewFood=async()=>{
+    const token=sessionStorage.getItem("token")
+    const reqHeader={
+      " Authorization": `Bearer ${token}` 
+    }
+     try{
+      const result=await viewFoodsAPI(id,reqHeader)
+      console.log(result);
+      setfoodDetails(result.data)
+      
+
+     }catch(error){
+       console.log(error);
+       
+     } 
+     
+
+  }
+ useEffect(()=>{
+  handleViewFood()
+ },[])
+
+   
+
   return (
     <>
     <div className="bg-gray-100 min-h-screen">
@@ -13,7 +45,7 @@ function Viewfood() {
         {/* Food Image */}
         <div className="bg-white rounded-2xl shadow overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1605472565761-3f0b6f63085e"
+            src={`${SERVERURL}/imgUploads/${foodDetails.uploadImages[0]}`}
             alt="Food"
             className="w-full h-[380px] object-cover"
           />
@@ -21,7 +53,7 @@ function Viewfood() {
 
         {/* Food Info */}
         <div className="bg-white p-8 rounded-2xl shadow">
-          <h1 className="text-4xl font-bold mb-3">Chicken Biryani</h1>
+          <h1 className="text-4xl font-bold mb-3">{foodDetails.foodname}</h1>
 
           {/* Rating */}
           <div className="flex items-center gap-1 text-yellow-500 mb-4">
@@ -30,13 +62,11 @@ function Viewfood() {
           </div>
 
           {/* Price */}
-          <p className="text-3xl text-red-600 font-bold mb-6">₹180</p>
+          <p className="text-3xl text-red-600 font-bold mb-6">₹{foodDetails.price}</p>
 
           {/* Description */}
-          <p className="text-gray-700 leading-relaxed mb-6">
-            A delicious and flavorful chicken biryani made with tender chicken,
-            aromatic basmati rice, and a blend of traditional Indian spices.
-            Served hot with raita.
+          <p className="text-gray-700 leading-relaxed mb-6 line-clamp-3 break-words">
+            {foodDetails.description}
           </p>
 
           {/* Quantity */}

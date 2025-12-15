@@ -4,6 +4,7 @@ import Footer from "../../Common/Footer";
 import { getAllFoodstoUserAPI } from "../../service/allAPI";
 import { CiSearch } from "react-icons/ci";
 import SERVERURL from "../../service/ServerURL";
+import { Link } from "react-router-dom";
 
 function Allfoods() {
   const [Allfoods, setAllfoods] = useState([]);
@@ -109,9 +110,9 @@ function Allfoods() {
                   <p className="text-red-600 text-lg font-bold mt-2">
                     ₹{item.price}
                   </p>
-                  <button className="mt-4 w-full bg-red-600 text-white py-2 rounded-xl hover:bg-red-700">
+                  <Link  to={`/view-food/${item._id}`}  className="mt-4 w-full bg-red-600 text-white py-2 rounded-xl hover:bg-red-700">
                     View Details
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))

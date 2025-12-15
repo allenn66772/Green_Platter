@@ -40,7 +40,7 @@ function App() {
 
         {/* User */}
         <Route path="/" element={<Userhome/>}/>
-        <Route path="/view-food" element={<Viewfood/>}/>
+        <Route path="/view-food/:id" element={<Viewfood/>}/>
         <Route path="/checkout" element={<Checkout/>}/>
         <Route path="/all-foods" element={<Allfoods/>}/>
         <Route path="/user-login" element={<Userauth/>}/>

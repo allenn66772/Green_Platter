@@ -38,3 +38,7 @@ export const  getAllFoodsInHomeAPI=async()=>{
 export const getAllFoodstoUserAPI=async(searchKey)=>{
     return await CommonAPI ("GET",`${SERVERURL}/all-foods?search=${searchKey}`,{})
 }
+//view food
+export const viewFoodsAPI=async(id,reqHeader)=>{
+    return await CommonAPI ("GET",`${SERVERURL}/view-food/${id}`,{},reqHeader)
+}
