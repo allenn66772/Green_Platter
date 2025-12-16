@@ -20,6 +20,7 @@ import Hotelauth from "./Hotel/pages/Hotelauth";
 import Userauth from "./User/pages/Userauth";
 import { ToastContainer } from "react-toastify";
 import HotelAddedFood from "./Hotel/pages/HotelAddedFood";
+import Hotelprofile from "./Hotel/pages/Hotelprofile";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/hotel-home" element={<Hotelhome/>}/>
         <Route path="/hotel-added-foods" element={<HotelAddedFood/>}/>
         <Route path="/view-order" element={<Vieworder/>}/>
+        <Route path="/hotel-profile" element={<Hotelprofile/>}/>
         <Route path="/hotel-login" element={<Hotelauth/>}/>
         <Route path="/hotel-register" element={<Hotelauth register/>}/>
 
