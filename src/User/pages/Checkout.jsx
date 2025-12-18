@@ -1,121 +1,319 @@
-import React from 'react'
-import Header from '../../Common/Header'
+import React, { useEffect, useState } from "react";
+import Header from "../../Common/Header";
+import { getFromCartAPI, createOrderAPI, createPaymentAPI } from "../../service/allAPI";
+
+import { loadStripe } from "@stripe/stripe-js";
 
 function Checkout() {
+  const [cartItems, setCartItems] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const [token, setToken] = useState("");
+
+  const [orderDetails, setOrderDetails] = useState({
+    fullname: "",
+    phone: "",
+    deliveryaddress: "",
+  });
+const stripePromise = loadStripe(
+  "pk_test_51ScgRSFRXLWOzbZMwK5DBZTnNI3S70fpkUlbSXKgqFgQyfbsxxu4qdTurhOJAHvXWUNOjChUtKbWmtJXnRqwQBWW00juZWMdKZ"
+);
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+  const DELIVERY_FEE = 40;
+
+  // 🛒 Get Cart
+  const getFoodfromCart = async (token) => {
+    try {
+      const reqHeader = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const result = await getFromCartAPI(reqHeader);
+
+      setCartItems(result?.data?.items || []);
+      setSubtotal(result?.data?.subtotal || 0);
+      setTotalItems(result?.data?.totalItems || 0);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+      getFoodfromCart(storedToken);
+    }
+  }, []);
+
+  // 🧾 Place Order
+  // const handlePlaceOrder = async () => {
+  //   if (isPlacingOrder) return; // 🚫 block duplicate calls
+
+  //   if (
+  //     !orderDetails.fullname ||
+  //     !orderDetails.phone ||
+  //     !orderDetails.deliveryaddress ||
+  //     !paymentMethod
+  //   ) {
+  //     alert("Please fill all details");
+  //     return;
+  //   }
+
+  //   try {
+  //     setIsPlacingOrder(true);
+
+  //     const reqHeader = {
+  //       Authorization: `Bearer ${token}`,
+  //       "Content-Type": "application/json",
+  //     };
+
+  //     const reqBody = {
+  //       items: cartItems.map((item) => ({
+  //         foodId: item.foodId._id,
+  //         quantity: item.quantity,
+  //         price: item.foodId.price,
+  //       })),
+  //       paymentMethod,
+  //       deliveryAddress: {
+  //         fullname: orderDetails.fullname,
+  //         phone: orderDetails.phone,
+  //         address: orderDetails.deliveryaddress,
+  //       },
+  //     };
+
+  //     const result = await createOrderAPI(reqBody, reqHeader);
+
+  //     alert("Order placed successfully ✅");
+  //   } catch (err) {
+  //     console.error(err.response?.data || err.message);
+  //     alert("Failed to place order ❌");
+  //   } finally {
+  //     setIsPlacingOrder(false);
+  //   }
+  // };
+
+  // const handlePurchase = async () => {
+  //   if (
+  //     !orderDetails.fullname ||
+  //     !orderDetails.phone ||
+  //     !orderDetails.deliveryaddress ||
+  //     !paymentMethod
+  //   ) {
+  //     alert("Please fill all details");
+  //     return;
+  //   }
+
+  //   const reqHeader = {
+  //     Authorization: `Bearer ${token}`,
+  //     "Content-Type": "application/json",
+  //   };
+
+  //   const reqBody = {
+  //     items: cartItems.map((item) => ({
+  //       _id: item.foodId._id,
+  //       foodname: item.foodId.foodname,
+  //       price: item.foodId.price,
+  //       quantity: item.quantity,
+  //       category: item.foodId.category,
+  //       image: item.foodId.image,
+  //     })),
+  //     paymentMethod,
+  //     deliveryAddress: orderDetails,
+  //   };
+
+  //   try {
+  //     const result = await createOrderAPI(reqBody, reqHeader);
+
+  //     // 🔴 CARD → Redirect to Stripe
+  //     if (paymentMethod === "CARD") {
+  //       window.location.href = result.data.checkoutSessionUrl;
+  //     } else {
+  //       alert("Order placed successfully");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("Order failed ❌");
+  //   }
+  // };
+
+const handlePurchase = async () => {
+  // 🔐 Basic validation
+  if (
+    !orderDetails.fullname ||
+    !orderDetails.phone ||
+    !orderDetails.deliveryaddress ||
+    !paymentMethod
+  ) {
+    alert("Please fill all details");
+    return;
+  }
+
+  const token = sessionStorage.getItem("token");
+  if (!token) {
+    alert("Please login");
+    return;
+  }
+
+  const reqHeader = {
+    Authorization: `Bearer ${token}`,
+   
+  };
+
+  // ✅ VERY IMPORTANT: Correct request body
+ const reqBody = {
+  items: cartItems.map((item) => ({
+    foodId: item.foodId._id,
+    quantity: item.quantity,
+  })),
+  paymentMethod,
+  deliveryAddress: {
+    fullname: orderDetails.fullname,
+    phone: orderDetails.phone,
+    address: orderDetails.deliveryaddress,
+  },
+};
+
+  try {
+    setIsPlacingOrder(true);
+
+    const result = await createOrderAPI(reqBody, reqHeader);
+
+    // 🔴 CARD → STRIPE
+    if (paymentMethod === "CARD") {
+      const stripe = await stripePromise;
+
+      const sessionUrl = result?.data?.checkoutSessionUrl;
+
+      if (!sessionUrl) {
+        alert("Stripe session creation failed");
+        return;
+      }
+
+      // ✅ Redirect to Stripe Checkout
+      window.location.href = sessionUrl;
+    } 
+    // 🟢 COD / UPI
+    else {
+      alert("Order placed successfully ✅");
+    }
+
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    alert("Order failed ❌");
+  } finally {
+    setIsPlacingOrder(false);
+  }
+};
+
+
+  const grandTotal = subtotal + DELIVERY_FEE;
+
   return (
-    <>
-     <div className="bg-gray-100 min-h-screen">
-      {/* Header */}
+    <div className="bg-gray-100 min-h-screen">
       <Header />
 
-      {/* Main Container */}
-      <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-        {/* Left: Delivery Details */}
+      <div className="max-w-5xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* 🚚 DELIVERY DETAILS */}
         <div className="bg-white p-6 shadow rounded-2xl lg:col-span-2">
           <h2 className="text-2xl font-semibold mb-6">Delivery Information</h2>
 
           <div className="space-y-5">
-            {/* Full Name */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Full Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter your name"
-                className="w-full p-3 border rounded-xl focus:outline-none"
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="Full Name"
+              className="w-full p-3 border rounded-xl"
+              onChange={(e) =>
+                setOrderDetails({ ...orderDetails, fullname: e.target.value })
+              }
+            />
 
-            {/* Phone */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                placeholder="Enter phone number"
-                className="w-full p-3 border rounded-xl focus:outline-none"
-              />
-            </div>
+            <input
+              type="number"
+              placeholder="Phone Number"
+              className="w-full p-3 border rounded-xl"
+              onChange={(e) =>
+                setOrderDetails({ ...orderDetails, phone: e.target.value })
+              }
+            />
 
-            {/* Address */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Delivery Address
-              </label>
-              <textarea
-                rows="3"
-                placeholder="Enter full address"
-                className="w-full p-3 border rounded-xl focus:outline-none"
-              ></textarea>
-            </div>
+            <textarea
+              rows="3"
+              placeholder="Delivery Address"
+              className="w-full p-3 border rounded-xl"
+              onChange={(e) =>
+                setOrderDetails({
+                  ...orderDetails,
+                  deliveryaddress: e.target.value,
+                })
+              }
+            />
 
-            {/* Payment Method */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-3">
-                Payment Method
-              </label>
-
-              <div className="flex items-center gap-6">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="payment" />
-                  <span>Cash on Delivery</span>
+            {/* 💳 PAYMENT */}
+            <div className="flex gap-6">
+              {["COD", "UPI", "CARD"].map((method) => (
+                <label key={method} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value={method}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                  />
+                  {method}
                 </label>
-
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="payment" />
-                  <span>UPI</span>
-                </label>
-
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="payment" />
-                  <span>Card</span>
-                </label>
-              </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Right: Summary */}
-        <div className="bg-white p-6 shadow rounded-2xl h-fit">
-          <h2 className="text-2xl font-semibold mb-6">Order Summary</h2>
+        {/* 🧾 ORDER SUMMARY */}
+        <div className="bg-white p-6 shadow rounded-2xl">
+          <h2 className="text-xl font-semibold mb-4">
+            Order Summary ({totalItems})
+          </h2>
 
-          {/* Items */}
-          <div className="space-y-4">
-            <div className="flex justify-between">
-              <span className="text-gray-700">Chicken Biriyani (2)</span>
-              <span className="font-semibold">₹360</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-gray-700">Shawarma (1)</span>
-              <span className="font-semibold">₹90</span>
-            </div>
-
-            <div className="border-t pt-4">
-              <div className="flex justify-between">
-                <span className="text-gray-700">Delivery Fee</span>
-                <span className="font-semibold">₹20</span>
+          <div className="space-y-3">
+            {cartItems.map((item) => (
+              <div key={item._id} className="flex justify-between text-sm">
+                <span>
+                  {item.foodId.foodname} × {item.quantity}
+                </span>
+                <span>₹{item.itemTotal}</span>
               </div>
+            ))}
+
+            <hr />
+
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span>₹{subtotal}</span>
             </div>
 
-            <div className="border-t pt-4 text-lg font-bold flex justify-between">
+            <div className="flex justify-between">
+              <span>Delivery Fee</span>
+              <span>₹{DELIVERY_FEE}</span>
+            </div>
+
+            <div className="flex justify-between font-bold text-lg">
               <span>Total</span>
-              <span>₹470</span>
+              <span>₹{grandTotal}</span>
             </div>
-          </div>
 
-          {/* Button */}
-          <button className="w-full mt-6 bg-red-600 text-white py-3 rounded-xl text-lg hover:bg-red-700">
-            Place Order
-          </button>
+            <button
+              onClick={handlePurchase}
+              disabled={isPlacingOrder}
+              className={`w-full mt-4 py-3 rounded-xl text-white
+    ${isPlacingOrder ? "bg-gray-400" : "bg-red-600 hover:bg-red-700"}`}
+            >
+              {isPlacingOrder ? "Placing Order..." : "Place Order"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
-    </>
-  )
+  );
 }
 
-export default Checkout
+export default Checkout;

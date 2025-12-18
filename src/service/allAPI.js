@@ -59,3 +59,15 @@ export const getFromCartAPI=async(reqHeader)=>{
 export const deleteFromCartAPI=async(foodId,reqHeader)=>{
     return await CommonAPI("DELETE",`${SERVERURL}/remove-from-cart/${foodId}`,{},reqHeader)
 }
+//create order API
+export const createOrderAPI=async(reqBody,reqHeader)=>{
+    return await CommonAPI ("POST",`${SERVERURL}/create-order`,reqBody,reqHeader)
+}
+//stripe handle purchase
+export const  createPaymentAPI=async(reqBody,reqHeader)=>{
+    return await CommonAPI ("POST",`${SERVERURL}/create-order`,reqBody,reqHeader)
+}
+//get orders
+export const getOrdersAPI=async(reqHeader)=>{
+    return await CommonAPI ("GET",`${SERVERURL}/orders/all-orders`,reqHeader)
+}

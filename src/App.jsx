@@ -22,6 +22,8 @@ import { ToastContainer } from "react-toastify";
 import HotelAddedFood from "./Hotel/pages/HotelAddedFood";
 import Hotelprofile from "./Hotel/pages/Hotelprofile";
 import Cart from "./User/pages/Cart";
+import PaymentSuccess from "./User/pages/PaymentSuccess";
+import PaymentError from "./User/pages/PaymentError";
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
         <Route path="/user-login" element={<Userauth/>}/>
         <Route path="/user-register" element={<Userauth register/>}/>
         <Route path="/cart" element={<Cart/>}/>
+        <Route path="/payment-success" element={<PaymentSuccess/>}/>
+        <Route path="/payment-error" element={<PaymentError/>}/>
 
         {/* common */}
         <Route path="/header" element={<Header/>}/>

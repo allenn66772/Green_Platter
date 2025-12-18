@@ -1,11 +1,26 @@
-import React from 'react'
-import { FaUtensils } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaUtensils, FaUserCircle } from "react-icons/fa";
 import { TiThMenu } from "react-icons/ti";
 
 function Header() {
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem("token");
+    const existingUser = sessionStorage.getItem("existingUser");
+
+    if (storedToken) {
+      setToken(storedToken);
+    }
+
+    if (existingUser) {
+      setUser(JSON.parse(existingUser));
+    }
+  }, []);
+
   return (
-    <>
-      <header className="bg-gray-100 shadow-md">
+    <header className="bg-gray-100 shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
         {/* Logo */}
@@ -23,14 +38,23 @@ function Header() {
           <a href="#" className="hover:text-red-500 transition">Contact</a>
         </nav>
 
-        {/* Buttons */}
+        {/* Right Section */}
         <div className="hidden md:flex items-center gap-4">
-          <button className="px-4 py-2 border border-red-500 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition">
-            Login
-          </button>
-          <button className="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition">
-            Register
-          </button>
+          {token ? (
+            <div className="flex items-center gap-2 text-gray-800 font-semibold">
+              <FaUserCircle className="text-2xl text-red-500" />
+              <span>{user?.username || user?.email}</span>
+            </div>
+          ) : (
+            <>
+              <button className="px-4 py-2 border border-red-500 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition">
+                Login
+              </button>
+              <button className="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition">
+                Register
+              </button>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Icon */}
@@ -39,8 +63,7 @@ function Header() {
         </button>
       </div>
     </header>
-    </>
-  )
+  );
 }
 
-export default Header
+export default Header;
