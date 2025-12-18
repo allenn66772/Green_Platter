@@ -51,3 +51,11 @@ export const getHotelDetailsAPI=async(reqHeader)=>{
 export const addToCartAPI=async(foodId, quantity,reqHeader)=>{
     return await CommonAPI ("POST",`${SERVERURL}/add-to-cart`,{foodId, quantity},reqHeader)
 }
+//get product from cart
+export const getFromCartAPI=async(reqHeader)=>{
+    return await CommonAPI("GET",`${SERVERURL}/get-cart`,{},reqHeader)
+}
+//delete food from cart
+export const deleteFromCartAPI=async(foodId,reqHeader)=>{
+    return await CommonAPI("DELETE",`${SERVERURL}/remove-from-cart/${foodId}`,{},reqHeader)
+}
