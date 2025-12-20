@@ -31,6 +31,18 @@ export const addFoodAPI=async(reqBody,reqHeader)=>{
 export const getHotelAddedFoodAPI=async(reqHeader)=>{
     return await CommonAPI ("GET",`${SERVERURL}/hotel-added-foods`,{},reqHeader)
 }
+//update Hotel Profile
+export const updateHotelProfileAPI=async(reqBody,reqHeader)=>{
+    return await CommonAPI ("PUT",`${SERVERURL}/update-hotel`,reqBody,reqHeader)
+}
+//get all hotel orders
+export const getHotelOrdersAPI=async(reqHeader)=>{
+    return await CommonAPI("GET",`${SERVERURL}/all-orders`,{},reqHeader)
+}
+//get hotel info
+export const getHotelInfoAPI=async(reqHeader)=>{
+    return await CommonAPI("GET",`${SERVERURL}/get-hotel-profile`,{},reqHeader)
+}
 //get home foods
 export const  getAllFoodsInHomeAPI=async()=>{
     return await CommonAPI ("GET",`${SERVERURL}/home-foods`)
@@ -44,9 +56,9 @@ export const viewFoodsAPI=async(id,reqHeader)=>{
     return await CommonAPI ("GET",`${SERVERURL}/view-food/${id}`,{},reqHeader)
 }
 // get hotel details in hotel profile
-export const getHotelDetailsAPI=async(reqHeader)=>{
-    return await CommonAPI ("GET",`${SERVERURL}/hotelProfile`,{},reqHeader)
-}
+// export const getHotelDetailsAPI=async(reqHeader)=>{
+//     return await CommonAPI ("GET",`${SERVERURL}/hotelProfile`,{},reqHeader)
+// }
 //add to cart
 export const addToCartAPI=async(foodId, quantity,reqHeader)=>{
     return await CommonAPI ("POST",`${SERVERURL}/add-to-cart`,{foodId, quantity},reqHeader)

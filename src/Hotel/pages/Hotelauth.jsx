@@ -4,7 +4,7 @@ import { FaCircleUser } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginHotelAPI, registerHotelAPI } from "../../service/allAPI";
-
+import { GoogleLogin } from '@react-oauth/google';
 function Hotelauth({register}) {
      const [showPassword, setShowPassword] = useState(false);
      const [hotelDetails, sethotelDetails] = useState({
@@ -91,12 +91,12 @@ function Hotelauth({register}) {
   console.log(hotelDetails);
   return (
     <>
-      <div className='w-full min-h-screen flex justify-center items-center flex-col bg-[url("https://cognizant.scene7.com/is/image/cognizant/insurance-innovation-as-a-service-hero-banner")] bg-cover bg-center'>
+      <div className='w-full min-h-screen flex justify-center items-center flex-col bg-[url("https://tableo.com/wp-content/uploads/Restaurant-Stock-Images-e1699951587809.webp")] bg-cover bg-center'>
         <div className="p-10">
-          <h1 className="text-3xl font-bold text-center text-white"> Hotel Login</h1>
+          <h1 className="text-5xl font-extrabold text-center text-red-600"> Admin  Login</h1>
           <div
             style={{ width: "400px" }}
-            className="bg-blue-950 text-white p-5 flex flex-col my-5 justify-center items-center "
+            className="bg-white text-red-600 rounded-2xl p-5 flex flex-col my-5 justify-center items-center "
           >
             <div
               style={{ width: "100px", height: "100px", borderRadius: "50%" }}
@@ -198,7 +198,7 @@ function Hotelauth({register}) {
                   <button onClick={HandleRegister}
                     type="button"
                     
-                    className="bg-green-700 p-2 w-full rounded"
+                    className="bg-red-600 text-white p-2 w-full rounded"
                   >
                     Register
                   </button>
@@ -207,7 +207,7 @@ function Hotelauth({register}) {
                   onClick={HandleLogin}
                     
                     type="button"
-                    className="bg-green-700 p-2 w-full rounded"
+                    className="bg-red-600 text-white p-2 w-full rounded"
                   >
                     Login
                   </button>
@@ -217,7 +217,7 @@ function Hotelauth({register}) {
               {!register && (
                 <div className="mt-1">
                   {/* google authentication */}
-                  {/* <GoogleLogin
+                  <GoogleLogin
                     onSuccess={(credentialResponse) => {
                       console.log(credentialResponse);
                       handleGoogleLogin(credentialResponse);
@@ -225,7 +225,7 @@ function Hotelauth({register}) {
                     onError={() => {
                       console.log("Login Failed");
                     }}
-                  /> */}
+                  />
                 </div>
               )}
 

@@ -6,56 +6,77 @@ import {
   FaClock,
   FaUtensils,
 } from "react-icons/fa";
-import { getHotelDetailsAPI } from "../../service/allAPI";
+import {getHotelInfoAPI } from "../../service/allAPI";
+import SERVERURL from "../../service/ServerURL";
 
 function Hotelprofile() {
   const [hotelDetails, sethotelDetails] = useState([]);
-  const [token, settoken] = useState("");
+  const [token,settoken]=useState("")
+  const [openmodal,setopenmodal]=useState(false)
 
-  const getHotelDetails = async (token) => {
-    const reqHeader = {
-      Authorization: `Bearer ${token}`,
-    };
-
+  const fetchHotelInfo = async (storedToken) => {
     try {
-      const result = await getHotelDetailsAPI(reqHeader);
-      sethotelDetails(result.data);
-      console.log(result.data);
+      const reqHeader = {
+        Authorization: `Bearer ${storedToken}`,
+      };
+      const result = await getHotelInfoAPI(reqHeader);
+      if (result.status == 200) {
+        sethotelDetails(result.data);
+        console.log(result.data);
+        
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    const usertoken = sessionStorage.getItem("token");
-    if (usertoken) {
-      settoken(usertoken);
-      getHotelDetails(usertoken);
-    }
-  }, []);
+ useEffect(() => {
+  const storedToken = sessionStorage.getItem("token");
+  settoken(storedToken);
+
+  if (storedToken) {
+    fetchHotelInfo(storedToken);
+  }
+}, []);
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50">
+      <div style={{
+  backgroundImage: hotelDetails?.uploadImages?.length
+    ? `url(${SERVERURL}/imgUploads/${hotelDetails.uploadImages[0]})`
+    : "none",
+}}
+ className="min-h-screen bg-gray-50">
         {/* Cover Section */}
         <div className="relative h-64 w-full">
-          <img
-            src="https://images.unsplash.com/photo-1555992336-03a23c2b16d1"
-            alt="Restaurant"
-            className="h-full w-full object-cover"
-          />
+          <div className="relative">
+            {/* Image Container */}
+            <div
+              onClick={() => setOpen(!open)}
+              className="h-12 w-12 rounded-full overflow-hidden cursor-pointer border-2 border-orange-500"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1555992336-03a23c2b16d1"
+                alt="Restaurant"
+                className="h-full w-full object-cover"
+              />
+            </div>
+
+            
+            
+          </div>
 
           {/* Dark Overlay */}
           <div className="absolute inset-0 bg-black/50 z-10" />
 
           {/* Edit Button */}
-          <button className="absolute top-4 right-6 z-20 bg-blue-600 text-white px-5 py-2 rounded-xl shadow hover:bg-blue-700 transition">
+          <button onClick={()=>setopenmodal(true)} className="absolute top-4 right-6 z-20 bg-blue-600 text-white px-5 py-2 rounded-xl shadow hover:bg-blue-700 transition">
             Edit Profile
           </button>
 
           {/* Restaurant Name & Rating */}
           <div className="absolute bottom-5 left-6 text-white z-20">
-            <h1 className="text-3xl font-bold">Spice Hub Restaurant</h1>
+            <h1 className="text-3xl font-bold">{hotelDetails.hotelname}</h1>
             <div className="flex items-center gap-1 mt-2">
               <FaStar className="text-yellow-400" />
               <FaStar className="text-yellow-400" />
@@ -74,9 +95,7 @@ function Hotelprofile() {
             <div className="bg-white rounded-2xl shadow-md p-6">
               <h2 className="text-xl font-semibold mb-3">About Restaurant</h2>
               <p className="text-gray-600 leading-relaxed">
-                Spice Hub is a popular multi-cuisine restaurant delivering
-                delicious Indian, Chinese, and Fast Food items. Known for fast
-                delivery, quality ingredients, and great taste.
+               {hotelDetails.description}
               </p>
             </div>
 
@@ -132,14 +151,14 @@ function Hotelprofile() {
           {/* Right Section */}
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-md p-6 space-y-4">
-              <h2 className="text-xl font-semibold">Restaurant Info</h2>
+              <h2 className="text-xl font-semibold">{hotelDetails.hotelname}</h2>
               <div className="flex items-center gap-3 text-gray-600 text-sm">
                 <FaPhoneAlt />
-                <span>+91 98765 43210</span>
+                <span>{hotelDetails.phone}</span>
               </div>
               <div className="flex items-center gap-3 text-gray-600 text-sm">
                 <FaEnvelope />
-                <span>spicehub@gmail.com</span>
+                <span>{hotelDetails.email}</span>
               </div>
               <div className="flex items-center gap-3 text-gray-600 text-sm">
                 <FaClock />

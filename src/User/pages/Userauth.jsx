@@ -84,17 +84,44 @@ function Userauth({ register }) {
     }
   };
 
+  //   const handleGoogleLogin = async(credentialResponse)=>{
+  //   console.log(credentialResponse.credential);
+  //   const googleData=jwtDecode(credentialResponse.credential)
+  //   console.log(googleData);
+  //   try {
+  //     const result =await googleLoginAPI({username:googleData.name,email:googleData.email,password:"googlepassword",profile:googleData.picture})
+  //     console.log(result);
+  //     if(result.status==200){
+  //       sessionStorage.setItem("existingUser",JSON.stringify(result.data.existingUser));
+  //       sessionStorage.setItem("token", result.data.token);
+  //       toast.success("Login Sucessful")
+  //        setauthorisedUser(true)
+  //      navigate("/admin-home")
+
+  //     }else{
+  //       toast.error("Something went Wrong")
+  //     }
+      
+      
+  //   } catch (error) {
+  //     console.log(error);
+      
+      
+  //   }
+    
+  // }
+
   return (
     <>
-      <div className='w-full min-h-screen flex justify-center items-center flex-col bg-[url("https://cognizant.scene7.com/is/image/cognizant/insurance-innovation-as-a-service-hero-banner")] bg-cover bg-center'>
+      <div className='w-full min-h-screen flex justify-center items-center flex-col bg-[url("https://tableo.com/wp-content/uploads/Restaurant-Stock-Images-e1699951587809.webp")] bg-cover bg-center'>
         <div className="p-10">
-          <h1 className="text-3xl font-bold text-center text-white">
+          <h1 className="text-3xl font-bold text-center text-red-500">
             {" "}
-            Hotel Login
+            Signup
           </h1>
           <div
             style={{ width: "400px" }}
-            className="bg-blue-950 text-white p-5 flex flex-col my-5 justify-center items-center "
+            className="bg-white text-red-500 p-5 rounded-2xl flex flex-col my-5 justify-center items-center "
           >
             <div
               style={{ width: "100px", height: "100px", borderRadius: "50%" }}
@@ -196,7 +223,7 @@ function Userauth({ register }) {
                   <button
                     onClick={HandleRegister}
                     type="button"
-                    className="bg-green-700 p-2 w-full rounded"
+                    className="bg-red-500 text-white p-2 w-full rounded"
                   >
                     Register
                   </button>
@@ -204,7 +231,7 @@ function Userauth({ register }) {
                   <button
                     onClick={HandleLogin}
                     type="button"
-                    className="bg-green-700 p-2 w-full rounded"
+                    className="bg-red-500 text-white p-2 w-full rounded"
                   >
                     Login
                   </button>
@@ -230,14 +257,14 @@ function Userauth({ register }) {
                 {register ? (
                   <p>
                     Are you Already a user{" "}
-                    <Link className="text-blue-400" to={"/login"}>
+                    <Link className="text-blue-400" to={"/user-login"}>
                       Login
                     </Link>{" "}
                   </p>
                 ) : (
                   <p>
                     Are you new user?{" "}
-                    <Link className="text-blue-400" to={"/register"}>
+                    <Link className="text-blue-400" to={"/user-register"}>
                       Register
                     </Link>{" "}
                   </p>

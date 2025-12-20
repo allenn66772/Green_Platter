@@ -24,6 +24,7 @@ import Hotelprofile from "./Hotel/pages/Hotelprofile";
 import Cart from "./User/pages/Cart";
 import PaymentSuccess from "./User/pages/PaymentSuccess";
 import PaymentError from "./User/pages/PaymentError";
+import EditProfile from "./Hotel/components/EditProfile";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/hotel-profile" element={<Hotelprofile/>}/>
         <Route path="/hotel-login" element={<Hotelauth/>}/>
         <Route path="/hotel-register" element={<Hotelauth register/>}/>
+        <Route path="/edit-profile" element={<EditProfile/>}/>
 
         {/* User */}
         <Route path="/" element={<Userhome/>}/>

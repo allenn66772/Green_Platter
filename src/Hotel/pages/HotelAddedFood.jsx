@@ -33,7 +33,7 @@ function HotelAddedFood() {
 
   return (
     <>
-      <Header />
+      
       <div className="min-h-screen bg-gray-100 p-8">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Added Foods</h1>
 

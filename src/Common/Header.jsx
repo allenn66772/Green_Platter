@@ -1,66 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { FaUtensils, FaUserCircle } from "react-icons/fa";
-import { TiThMenu } from "react-icons/ti";
+import { FaUtensils, FaShoppingCart } from "react-icons/fa";
+import { HiChevronDown } from "react-icons/hi";
 
 function Header() {
-  const [token, setToken] = useState("");
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const storedToken = sessionStorage.getItem("token");
-    const existingUser = sessionStorage.getItem("existingUser");
-
-    if (storedToken) {
-      setToken(storedToken);
-    }
-
-    if (existingUser) {
-      setUser(JSON.parse(existingUser));
-    }
-  }, []);
-
   return (
-    <header className="bg-gray-100 shadow-md">
+    <header className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
         {/* Logo */}
         <div className="flex items-center gap-2">
           <FaUtensils className="text-red-500 text-3xl" />
-          <h1 className="text-2xl font-bold text-gray-800">FoodieSpot</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Foodie<span className="text-red-500">Spot</span>
+          </h1>
         </div>
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
-          <a href="#" className="hover:text-red-500 transition">Home</a>
-          <a href="#" className="hover:text-red-500 transition">Menu</a>
-          <a href="#" className="hover:text-red-500 transition">Hotels</a>
-          <a href="#" className="hover:text-red-500 transition">About</a>
-          <a href="#" className="hover:text-red-500 transition">Contact</a>
+          <span className="cursor-pointer hover:text-red-500">Home</span>
+          <span className="cursor-pointer hover:text-red-500">Foods</span>
+          <span className="cursor-pointer hover:text-red-500">Restaurants</span>
+          <span className="cursor-pointer hover:text-red-500">Contact</span>
         </nav>
 
         {/* Right Section */}
-        <div className="hidden md:flex items-center gap-4">
-          {token ? (
-            <div className="flex items-center gap-2 text-gray-800 font-semibold">
-              <FaUserCircle className="text-2xl text-red-500" />
-              <span>{user?.username || user?.email}</span>
-            </div>
-          ) : (
-            <>
-              <button className="px-4 py-2 border border-red-500 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition">
-                Login
-              </button>
-              <button className="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition">
-                Register
-              </button>
-            </>
-          )}
-        </div>
+        <div className="flex items-center gap-6">
 
-        {/* Mobile Menu Icon */}
-        <button className="md:hidden text-3xl text-gray-700">
-          <TiThMenu />
-        </button>
+          {/* Cart */}
+          <div className="relative cursor-pointer">
+            <FaShoppingCart className="text-gray-700 text-xl" />
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 rounded-full">
+              2
+            </span>
+          </div>
+
+          {/* Profile Dropdown (Design Only) */}
+          <div className="relative group cursor-pointer">
+            <div className="flex items-center gap-2">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                alt="profile"
+                className="w-9 h-9 rounded-full border"
+              />
+              <span className="hidden md:block font-medium text-gray-700">
+                John
+              </span>
+              <HiChevronDown className="text-gray-500" />
+            </div>
+
+            {/* Dropdown */}
+            <div className="absolute right-0 mt-3 w-40 bg-white rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition">
+              <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                Profile
+              </div>
+              <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                Orders
+              </div>
+              <div className="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                Logout
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );
