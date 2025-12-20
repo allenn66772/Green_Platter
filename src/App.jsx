@@ -25,6 +25,7 @@ import Cart from "./User/pages/Cart";
 import PaymentSuccess from "./User/pages/PaymentSuccess";
 import PaymentError from "./User/pages/PaymentError";
 import EditProfile from "./Hotel/components/EditProfile";
+import AllHotel from "./Hotel/pages/AllHotel";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/payment-success" element={<PaymentSuccess/>}/>
         <Route path="/payment-error" element={<PaymentError/>}/>
+        <Route path="/all-hotels" element={<AllHotel/>}/>
 
         {/* common */}
         <Route path="/header" element={<Header/>}/>

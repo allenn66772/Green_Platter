@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FaRegEdit } from 'react-icons/fa'
+// import { hotelProfileUpdateContext } from '../../context/Contextshare'
 
 function EditProfile() {
+
+  
   return (
     <>
   <div className="p-4 md:p-10">

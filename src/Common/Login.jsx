@@ -1,136 +1,59 @@
-import React, { useState } from "react";
-import { FaUser, FaHotel } from "react-icons/fa";
-import { motion } from "framer-motion";
-import Header from "./Header";
+import React from "react";
+import { FaUser, FaHotel, FaUserShield } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [role, setRole] = useState("user");        // user / hotel
-  const [isRegister, setIsRegister] = useState(false);  // login / register toggle
+  const navigate = useNavigate();  
 
   return (
    <>
-   <Header/>
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-    
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white shadow-xl p-8 rounded-2xl w-full max-w-md"
+     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 px-4">
+      <div className="max-w-4xl w-full">
+        <h1 className="text-3xl md:text-4xl font-bold text-center mb-10 text-gray-800">
+          Login As
+        </h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          {/* ADMIN */}
+          <div
+            onClick={() => navigate("/admin/login")}
+            className="cursor-pointer bg-white rounded-2xl shadow-lg p-8 text-center hover:scale-105 transition"
           >
-    
-            {/* Role Selector */}
-            <div className="flex justify-center mb-6 gap-4">
-              <button
-                onClick={() => setRole("user")}
-                className={`px-4 py-2 flex items-center gap-2 rounded-xl border 
-                ${role === "user" ? "bg-red-500 text-white" : "bg-gray-200 text-gray-700"}`}
-              >
-                <FaUser /> User
-              </button>
-    
-              <button
-                onClick={() => setRole("hotel")}
-                className={`px-4 py-2 flex items-center gap-2 rounded-xl border 
-                ${role === "hotel" ? "bg-red-500 text-white" : "bg-gray-200 text-gray-700"}`}
-              >
-                <FaHotel /> Hotel
-              </button>
-            </div>
-    
-            {/* Register Form */}
-            {isRegister ? (
-              <form className="space-y-4">
-                <div>
-                  <label className="text-gray-700 font-medium">Full Name</label>
-                  <input
-                    type="text"
-                    className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-red-400"
-                    placeholder="Enter your name"
-                  />
-                </div>
-    
-                <div>
-                  <label className="text-gray-700 font-medium">Email</label>
-                  <input
-                    type="email"
-                    className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-red-400"
-                    placeholder="Enter your email"
-                  />
-                </div>
-    
-                <div>
-                  <label className="text-gray-700 font-medium">Password</label>
-                  <input
-                    type="password"
-                    className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-red-400"
-                    placeholder="Create a password"
-                  />
-                </div>
-    
-                <button
-                  type="submit"
-                  className="w-full bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition"
-                >
-                  Register as {role === "user" ? "User" : "Hotel"}
-                </button>
-              </form>
-            ) : (
-              /* Login Form */
-              <form className="space-y-4">
-                <div>
-                  <label className="text-gray-700 font-medium">Email</label>
-                  <input
-                    type="email"
-                    className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-red-400"
-                    placeholder="Enter your email"
-                  />
-                </div>
-    
-                <div>
-                  <label className="text-gray-700 font-medium">Password</label>
-                  <input
-                    type="password"
-                    className="w-full mt-1 p-3 border rounded-xl focus:ring-2 focus:ring-red-400"
-                    placeholder="Enter your password"
-                  />
-                </div>
-    
-                <button
-                  type="submit"
-                  className="w-full bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition"
-                >
-                  Login as {role === "user" ? "User" : "Hotel"}
-                </button>
-              </form>
-            )}
-    
-            {/* Switch */}
-            <div className="text-center mt-5 text-gray-600">
-              {isRegister ? (
-                <p>
-                  Already have an account?{" "}
-                  <span
-                    onClick={() => setIsRegister(false)}
-                    className="text-red-500 font-semibold cursor-pointer hover:underline"
-                  >
-                    Login
-                  </span>
-                </p>
-              ) : (
-                <p>
-                  New user?{" "}
-                  <span
-                    onClick={() => setIsRegister(true)}
-                    className="text-red-500 font-semibold cursor-pointer hover:underline"
-                  >
-                    Register
-                  </span>
-                </p>
-              )}
-            </div>
-    
-          </motion.div>
+            <FaUserShield className="text-5xl text-red-600 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Admin</h2>
+            <p className="text-gray-500 text-sm">
+              Manage platform, users & hotels
+            </p>
+          </div>
+
+          {/* HOTEL */}
+          <div
+            onClick={() => navigate("/hotel-login")}
+            className="cursor-pointer bg-white rounded-2xl shadow-lg p-8 text-center hover:scale-105 transition"
+          >
+            <FaHotel className="text-5xl text-blue-600 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Hotel</h2>
+            <p className="text-gray-500 text-sm">
+              Manage hotel profile & menu
+            </p>
+          </div>
+
+          {/* USER */}
+          <div
+            onClick={() => navigate("/user-login")}
+            className="cursor-pointer bg-white rounded-2xl shadow-lg p-8 text-center hover:scale-105 transition"
+          >
+            <FaUser className="text-5xl text-green-600 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2">User</h2>
+            <p className="text-gray-500 text-sm">
+              Order food & explore restaurants
+            </p>
+          </div>
+
         </div>
+      </div>
+    </div>
    </>
   );
 }

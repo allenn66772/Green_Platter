@@ -55,10 +55,7 @@ export const getAllFoodstoUserAPI=async(searchKey)=>{
 export const viewFoodsAPI=async(id,reqHeader)=>{
     return await CommonAPI ("GET",`${SERVERURL}/view-food/${id}`,{},reqHeader)
 }
-// get hotel details in hotel profile
-// export const getHotelDetailsAPI=async(reqHeader)=>{
-//     return await CommonAPI ("GET",`${SERVERURL}/hotelProfile`,{},reqHeader)
-// }
+
 //add to cart
 export const addToCartAPI=async(foodId, quantity,reqHeader)=>{
     return await CommonAPI ("POST",`${SERVERURL}/add-to-cart`,{foodId, quantity},reqHeader)
