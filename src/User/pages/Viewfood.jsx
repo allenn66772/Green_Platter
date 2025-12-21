@@ -28,6 +28,8 @@ function Viewfood() {
     }
   };
 
+
+
   const handleAddtoCart = async () => {
     if (!token) {
       alert("PLease login");
@@ -125,10 +127,7 @@ function Viewfood() {
               Add to Cart
             </button>
 
-            {/* Buy Now Button */}
-            <button className="w-full mt-3 bg-black hover:bg-gray-900 text-white font-semibold py-3 rounded-xl text-lg">
-              Buy Now
-            </button>
+          
           </div>
         </div>
 

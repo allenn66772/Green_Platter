@@ -93,7 +93,7 @@ function Hotelauth({register}) {
     <>
       <div className='w-full min-h-screen flex justify-center items-center flex-col bg-[url("https://tableo.com/wp-content/uploads/Restaurant-Stock-Images-e1699951587809.webp")] bg-cover bg-center'>
         <div className="p-10">
-          <h1 className="text-5xl font-extrabold text-center text-red-600"> Admin  Login</h1>
+          <h1 className="text-5xl font-extrabold text-center text-red-600"> Hotel  Login</h1>
           <div
             style={{ width: "400px" }}
             className="bg-white text-red-600 rounded-2xl p-5 flex flex-col my-5 justify-center items-center "

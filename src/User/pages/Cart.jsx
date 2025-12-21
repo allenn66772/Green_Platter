@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaTrash, FaPlus, FaMinus } from "react-icons/fa";
-import { deleteFromCartAPI, getFromCartAPI } from "../../service/allAPI";
+import {  deleteFromCartAPI, getFromCartAPI } from "../../service/allAPI";
 import Header from "../../Common/Header";
+import { Link } from "react-router-dom";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -44,6 +45,8 @@ function Cart() {
     }
   }
 
+
+
   useEffect(() => {
     const storedToken = sessionStorage.getItem("token");
     if (storedToken) {
@@ -61,7 +64,7 @@ function Cart() {
       <div className="min-h-screen bg-gray-100 px-4 py-6 sm:px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* 🛒 CART ITEMS */}
+          
           <div className="lg:col-span-2">
             <h1 className="text-xl sm:text-2xl font-semibold mb-4">
               Your Cart ({totalItems} items)
@@ -121,7 +124,7 @@ function Cart() {
             )}
           </div>
 
-          {/* 🧾 ORDER SUMMARY */}
+          
           <div className="bg-white rounded-xl shadow p-6 h-fit lg:sticky mt-12 lg:top-24">
             <h2 className="text-lg font-semibold mb-4">
               Order Summary
@@ -144,9 +147,9 @@ function Cart() {
               <span>₹{grandTotal}</span>
             </div>
 
-            <button className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition">
+            <Link to="/checkout"   className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition">
               Proceed to Checkout
-            </button>
+            </Link>
           </div>
 
         </div>

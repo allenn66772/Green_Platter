@@ -140,7 +140,7 @@ const stripePromise = loadStripe(
   // };
 
 const handlePurchase = async () => {
-  // 🔐 Basic validation
+  //  Basic validation
   if (
     !orderDetails.fullname ||
     !orderDetails.phone ||
@@ -162,7 +162,7 @@ const handlePurchase = async () => {
    
   };
 
-  // ✅ VERY IMPORTANT: Correct request body
+ 
  const reqBody = {
   items: cartItems.map((item) => ({
     foodId: item.foodId._id,
@@ -181,7 +181,7 @@ const handlePurchase = async () => {
 
     const result = await createOrderAPI(reqBody, reqHeader);
 
-    // 🔴 CARD → STRIPE
+    //  CARD → STRIPE
     if (paymentMethod === "CARD") {
       const stripe = await stripePromise;
 
@@ -192,17 +192,17 @@ const handlePurchase = async () => {
         return;
       }
 
-      // ✅ Redirect to Stripe Checkout
+      //  Redirect to Stripe Checkout
       window.location.href = sessionUrl;
     } 
-    // 🟢 COD / UPI
+    //  COD / UPI
     else {
-      alert("Order placed successfully ✅");
+      alert("Order placed successfully ");
     }
 
   } catch (err) {
     console.error(err.response?.data || err.message);
-    alert("Order failed ❌");
+    alert("Order failed ");
   } finally {
     setIsPlacingOrder(false);
   }
@@ -216,7 +216,7 @@ const handlePurchase = async () => {
       <Header />
 
       <div className="max-w-5xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* 🚚 DELIVERY DETAILS */}
+        {/*  DELIVERY DETAILS */}
         <div className="bg-white p-6 shadow rounded-2xl lg:col-span-2">
           <h2 className="text-2xl font-semibold mb-6">Delivery Information</h2>
 
@@ -268,7 +268,7 @@ const handlePurchase = async () => {
           </div>
         </div>
 
-        {/* 🧾 ORDER SUMMARY */}
+        {/* ORDER SUMMARY */}
         <div className="bg-white p-6 shadow rounded-2xl">
           <h2 className="text-xl font-semibold mb-4">
             Order Summary ({totalItems})

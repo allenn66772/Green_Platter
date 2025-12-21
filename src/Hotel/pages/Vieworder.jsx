@@ -1,57 +1,71 @@
 import React, { useEffect, useState } from "react";
 import Hotelsidebar from "../components/Hotelsidebar";
-import { getOrdersAPI } from "../../service/allAPI";
+import { getOrdersAPI, approveOrderAPI } from "../../service/allAPI";
+import { toast } from "react-toastify";
 
 function Vieworder() {
   const [orders, setOrders] = useState([]);
 
+  // 🔹 Fetch Orders
   const fetchAllOrders = async () => {
-  try {
+    try {
+      const token = sessionStorage.getItem("token");
+
+      const reqHeader = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const result = await getOrdersAPI(reqHeader);
+      setOrders(result?.data || []);
+    } catch (error) {
+      console.error("Fetch orders error:", error);
+      setOrders([]);
+    }
+  };
+
+  // 🔹 Status Style
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "Pending":
+        return "bg-yellow-200 text-yellow-700";
+      case "Approved":
+        return "bg-green-200 text-green-700";
+      case "Delivered":
+        return "bg-blue-200 text-blue-700";
+      default:
+        return "bg-gray-200 text-gray-700";
+    }
+  };
+
+  // 🔹 Approve Order
+  const handleApproveOrder = async (orderId) => {
     const token = sessionStorage.getItem("token");
 
     const reqHeader = {
       Authorization: `Bearer ${token}`,
     };
 
-    const result = await getOrdersAPI(reqHeader);
+    try {
+      const result = await approveOrderAPI(orderId, reqHeader);
 
-    
-    if (result && result.data) {
-      setOrders(result.data);
-    } else {
-      setOrders([]);
-    }
-  } catch (error) {
-    console.error("Fetch orders error:", error);
-    setOrders([]); // ✅ prevent crash
-  }
-};
-
-
-  const getStatusStyle = (status) => {
-    switch (status) {
-      case "Pending":
-        return "bg-yellow-200 text-yellow-700";
-      case "Delivered":
-        return "bg-green-200 text-green-700";
-      case "In Progress":
-        return "bg-blue-200 text-blue-700";
-      default:
-        return "bg-gray-200 text-gray-700";
+      if (result.status === 200) {
+        toast.success("Order approved successfully");
+        fetchAllOrders();
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to approve order");
     }
   };
-   
-  useEffect(()=>{
-    fetchAllOrders()
-  },[])
 
+  useEffect(() => {
+    fetchAllOrders();
+  }, []);
 
   return (
     <div className="flex">
-      {/* Sidebar */}
       <Hotelsidebar />
 
-      {/* Main Content */}
       <div className="flex-1 p-8 bg-gray-100 min-h-screen">
         <h1 className="text-3xl font-semibold mb-6">Orders</h1>
 
@@ -81,15 +95,26 @@ function Vieworder() {
                     </td>
 
                     <td className="p-4">
-                      {order.deliveryAddress?.fullname}
+                      {order.deliveryAddress?.fullname || "—"}
                     </td>
 
+                    
                     <td className="p-4">
-                      {order.items.map((item) => (
-                        <div key={item._id}>
-                          {item.foodId?.foodname}
-                        </div>
-                      ))}
+                      {order.items
+                        .filter((item) => item.foodId) // remove deleted foods
+                        .map((item) => (
+                          <div key={item._id}>
+                            {item.foodId.foodname}
+                          </div>
+                        ))}
+
+                      {order.items.every(
+                        (item) => !item.foodId
+                      ) && (
+                        <span className="text-gray-400 text-sm">
+                          Food unavailable
+                        </span>
+                      )}
                     </td>
 
                     <td className="p-4">
@@ -115,9 +140,20 @@ function Vieworder() {
                     </td>
 
                     <td className="p-4">
-                      <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                        View
-                      </button>
+                      {order.status === "Pending" ? (
+                        <button
+                          onClick={() =>
+                            handleApproveOrder(order._id)
+                          }
+                          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                        >
+                          Approve
+                        </button>
+                      ) : (
+                        <span className="text-gray-400 text-sm">
+                          —
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))

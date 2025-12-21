@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function PaymentSuccess() {
   return (
@@ -19,13 +20,11 @@ function PaymentSuccess() {
         </p>
 
         <div className="space-y-3">
-          <button className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 transition">
-            View Orders
-          </button>
+         
 
-          <button className="w-full border border-green-600 text-green-600 py-3 rounded-xl hover:bg-green-50 transition">
+          <Link to="/all-foods" className="w-full border border-green-600 text-green-600 py-3 rounded-xl hover:bg-green-50 transition">
             Continue Shopping
-          </button>
+          </Link>
         </div>
       </div>
     </div>

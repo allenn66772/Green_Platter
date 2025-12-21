@@ -7,7 +7,7 @@ import { img } from "framer-motion/client";
 
 function Addfood() {
   const [preview, setpreview] = useState("");
-  const [token,settoken]=useState("")
+  const [token, settoken] = useState("");
   const [allUploadImages, setallUploadImages] = useState([]);
   const [foodDetails, setfoodDetails] = useState({
     foodname: "",
@@ -30,41 +30,56 @@ function Addfood() {
   };
 
   //add food
-  const Handleaddfood=async()=>{
-    const{foodname,price,category,description,uploadImages}=foodDetails
-    if(!foodname || !price || !category || !description || uploadImages.length===0){
-      toast.info("Fill all fields completely")
-    }else{
-      const reqHeader={Authorization:`Bearer ${token}`}
-      const reqBody=new FormData()
+  const Handleaddfood = async () => {
+    const { foodname, price, category, description, uploadImages } =
+      foodDetails;
+    if (
+      !foodname ||
+      !price ||
+      !category ||
+      !description ||
+      uploadImages.length === 0
+    ) {
+      toast.info("Fill all fields completely");
+    } else {
+      const reqHeader = { Authorization: `Bearer ${token}` };
+      const reqBody = new FormData();
 
-      for(let key in foodDetails){
-        if(key !=="uploadImages")reqBody.append(key,foodDetails[key])
-          else uploadImages.forEach((img)=>reqBody.append("uploadImages",img))
+      for (let key in foodDetails) {
+        if (key !== "uploadImages") reqBody.append(key, foodDetails[key]);
+        else uploadImages.forEach((img) => reqBody.append("uploadImages", img));
       }
-   
-       try {
-                  const result=await addFoodAPI(reqBody,reqHeader)
-                  console.log(result);
-                  if(result.status == 200){
-                    toast.success("Food added successfully")
-                  }else{
-                    toast.error("something went wrong")
-                  }
-                  
 
-       } catch (error) {
+      try {
+        const result = await addFoodAPI(reqBody, reqHeader);
+        console.log(result);
+        if (result.status == 200) {
+          setfoodDetails({
+            foodname: "",
+            price: "",
+            category: "",
+            description: "",
+            uploadImages: [],
+          });
+
+          
+          setpreview("");
+          setallUploadImages([]);
+
+          toast.success("Food added successfully");
+        } else {
+          toast.error("something went wrong");
+        }
+      } catch (error) {
         console.log(error);
-        
-        
-       }
+      }
     }
-  }
-  useEffect(()=>{
-    if(sessionStorage.getItem("token")){
-      settoken(sessionStorage.getItem("token"))
+  };
+  useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      settoken(sessionStorage.getItem("token"));
     }
-  },[])
+  }, []);
   return (
     <>
       <Header />
@@ -135,10 +150,11 @@ function Addfood() {
                     className="w-full p-3 border rounded-xl focus:outline-none"
                   >
                     <option value="">Select category</option>
-                    <option>Biriyani</option>
+                    <option>Veg</option>
+                    <option>Non-veg</option>
                     <option>Snacks</option>
                     <option>Drinks</option>
-                    <option>Cakes</option>
+                    <option>Dessert</option>
                     <option>Fried Items</option>
                   </select>
                 </div>
@@ -199,7 +215,8 @@ function Addfood() {
                 </div>
 
                 {/* Button */}
-                <button onClick={Handleaddfood}
+                <button
+                  onClick={Handleaddfood}
                   type="button"
                   className="w-full bg-red-600 text-white py-3 rounded-xl text-lg font-medium hover:bg-red-700 transition"
                 >

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function PaymentError() {
   return (
@@ -19,13 +20,11 @@ function PaymentError() {
         </p>
 
         <div className="space-y-3">
-          <button className="w-full bg-red-600 text-white py-3 rounded-xl hover:bg-red-700 transition">
-            Try Again
-          </button>
+          
 
-          <button className="w-full border border-red-600 text-red-600 py-3 rounded-xl hover:bg-red-50 transition">
+          <Link to="/cart" className="w-full border border-red-600 text-red-600 py-3 rounded-xl hover:bg-red-50 transition">
             Go to Cart
-          </button>
+          </Link>
         </div>
       </div>
     </div>

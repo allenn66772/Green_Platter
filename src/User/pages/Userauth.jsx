@@ -60,7 +60,7 @@ function Userauth({ register }) {
         );
         sessionStorage.setItem("token", result.data.token);
         toast.success(`Login Sucessfull`);
-        navigate("/");
+        navigate("/user-home");
         setuserDetails({
           username: "",
           email: "",

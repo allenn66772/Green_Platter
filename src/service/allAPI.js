@@ -69,9 +69,9 @@ export const deleteFromCartAPI=async(foodId,reqHeader)=>{
     return await CommonAPI("DELETE",`${SERVERURL}/remove-from-cart/${foodId}`,{},reqHeader)
 }
 //create order API
-export const createOrderAPI=async(reqBody,reqHeader)=>{
-    return await CommonAPI ("POST",`${SERVERURL}/create-order`,reqBody,reqHeader)
-}
+export const createOrderAPI = async (reqBody, reqHeader) => {
+  return await CommonAPI("POST",`${SERVERURL}/create-order`,reqBody,reqHeader)};
+
 //stripe handle purchase
 export const  createPaymentAPI=async(reqBody,reqHeader)=>{
     return await CommonAPI ("POST",`${SERVERURL}/create-order`,reqBody,reqHeader)
@@ -80,3 +80,21 @@ export const  createPaymentAPI=async(reqBody,reqHeader)=>{
 export const getOrdersAPI=async(reqHeader)=>{
     return await CommonAPI ("GET",`${SERVERURL}/orders/all-orders`,reqHeader)
 }
+//delete foods
+export const deleteFoodsAPI=async(foodId,reqHeader)=>{
+    return await CommonAPI ("DELETE",`${SERVERURL}/delete-food/${foodId}`,{},reqHeader)
+}
+//update status pending to fullfilled
+export const approveOrderAPI = async (orderId, reqHeader) => {
+  return await CommonAPI(
+    "PUT",
+    `${SERVERURL}/approve-order/${orderId}`,
+    {},
+    reqHeader
+  );
+};
+//get all hotels
+export const getAllHotelsAPI = async () => {
+  return await CommonAPI("GET",`${SERVERURL}/all-hotels`,{})};
+
+//clear cart

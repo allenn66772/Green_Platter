@@ -62,12 +62,12 @@ function Userhome() {
                 Order Now
               </Link>
 
-              <Link
+           {!token &&   <Link
                 to="/login"
                 className="border border-red-600 text-red-600 px-6 py-3 rounded-xl"
               >
                 Login
-              </Link>
+              </Link>}
             </div>
           </div>
 
